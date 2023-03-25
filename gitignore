@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+*.env
+.env.local
+.env.*.local
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Media and static files
+/media/
+/static/
+
+# Django secret key
+*.secret
+
+# Other Django generated files
+*.pyc
+*.pid
+*.coverage
+.coverage
+htmlcov/
+.coverage.xml
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+*.egg
+MANIFEST
+
+# IDEs
+.idea/
+.vscode/
+
+# Compiled Python modules
+*.pyo
+
+# Cache and temporary files
+*.cache
+*.swp
+.DS_Store
