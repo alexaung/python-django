@@ -1,0 +1,48 @@
+{% extends "auctions/layout.html" %}
+
+{% load static %}
+
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item active" aria-current="page">Watchlist</li>
+{% endblock %}
+
+{% block body %}
+<body class="index-body">
+  <h1 class="display-4 mb-4">Watchlist</h1>
+  {% if watchlist %}
+    <div class="card-list">
+        {% for listing, current_price in watchlist %}
+        <div class="card">
+        <a href="{% url 'listing' listing.id %}">
+            {% if listing.image_url %}
+              <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="card-img-top img-fluid">
+            {% else %}
+              <img src="{% static 'auctions/no-image.png' %}" alt="Default Image" class="card-img-top img-fluid">
+            {% endif %}
+        </a>
+        <div class="card-body">
+            <h5 class="card-title">
+            <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+            </h5>
+            <p class="card-text">Current Price: ${{ current_price }}</p>
+            <p class="card-text">
+            <small class="text-muted">Created: {{ listing.created_date }}</small>
+            </p>
+            <p class="card-text">{{ listing.description|truncatechars:100 }}</p>
+        </div>
+        <a href="{% url 'listing' listing.id %}" class="btn btn-primary">View Listing</a>
+        </div>
+        {% endfor %}
+    </div>
+  {% else %}
+  <div class="text-center">
+    <i class="fas fa-exclamation-circle fa-5x mb-4 text-secondary"></i>
+    <h3 class="mb-3">No items in your watchlist yet.</h3>
+    <p class="lead">
+        You can add items to your watchlist from the listing page. Simply click the "Add to Watchlist" button on any listing that you are interested in.
+    </p>
+    </div>
+  {% endif %}
+</body>
+{% endblock %}

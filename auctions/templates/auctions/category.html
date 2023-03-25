@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %} 
+
+{% load static %}
+
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item"><a href="{% url 'categories' %}">Categories</a></li>
+  <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+{% endblock %}
+
+{% block body %}
+<body class="index-body">
+  <!-- Add custom class to body element -->
+  <h1 class="display-4 mb-4">{{ category.name }}</h1>
+  {% if listings %}
+  <div class="row">
+    {% for listing in listings %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-200">
+        {% if listing.image_url %}
+          <img src="{{ listing.image_url }}" alt="{{ listing.title }}" class="card-img-top img-fluid">
+        {% else %}
+          <img src="{% static 'auctions/no-image.png' %}" alt="Default Image" class="card-img-top img-fluid">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{% url 'listing' listing.id %}">{{listing.title}}</a>
+          </h5>
+          <p class="card-text">Current Price: ${{ listing.current_price }}</p>
+          <p class="card-text">
+            <small class="text-muted"
+              >Created: {{ listing.created_date }}</small
+            >
+          </p>
+          <a href="{% url 'listing' listing.id %}" class="btn btn-primary"
+            >View Listing</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center">
+    <i class="fas fa-exclamation-circle fa-5x mb-4 text-secondary"></i>
+    <h3 class="mb-3">No active listings found in this category.</h3>
+    <p class="lead">Try searching for a different category or check back later.</p>
+  </div>
+  {% endif %}
+</body>
+{% endblock %}

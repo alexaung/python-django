@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block breadcrumb %}
+  {{ block.super }}
+  <li class="breadcrumb-item active" aria-current="page">Categories</li>
+{% endblock %}
+
+{% block body %}
+    
+    <h1 class="display-4 mb-4">Categories</h1>
+  
+  {% if categories %}
+    <div class="row">
+      {% for category in categories %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            
+            <div class="card-body">
+              <h5 class="card-title">{{ category.name }}</h5>
+              <p class="card-text">{{ category.description }}</p>
+              <a href="{% url 'category' category.id %}" class="btn btn-primary">View Listings</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+    {% if categories.has_other_pages %}
+      <nav>
+        <ul class="pagination">
+          {% if categories.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ categories.previous_page_number }}">Previous</a></li>
+          {% endif %}
+          {% for page in categories.paginator.page_range %}
+            {% if categories.number == page %}
+              <li class="page-item active"><a class="page-link" href="#">{{ page }} <span class="sr-only">(current)</span></a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if categories.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ categories.next_page_number }}">Next</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+    
+  {% else %}
+      <div class="text-center">
+        <i class="fas fa-exclamation-circle fa-5x mb-4 text-secondary"></i>
+        <h3 class="mb-3">There are currently no categories available.</h3>
+        <p class="lead">Please check back later or contact support if you believe there should be categories available.</p>
+      </div>
+  {% endif %}
+  
+{% endblock %}

@@ -1,0 +1,196 @@
+{% load static %}
+
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}Bidz{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-primary"
+      id="main-navbar"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <i class="fas fa-gavel"></i> Bidz
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse justify-content-between"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                href="{% url 'index' %}"
+              >
+                <i class="fas fa-home"></i> Active Listings
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'inactive_listings' %}active{% endif %}"
+                href="{% url 'inactive_listings' %}"
+              >
+                <i class="fas fa-archive"></i> Closed Listings
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'categories' %}active{% endif %}"
+                href="{% url 'categories' %}"
+              >
+                <i class="fas fa-list"></i> Categories
+              </a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'watchlist' %}active{% endif %}"
+                href="{% url 'watchlist' %}"
+              >
+                <i class="fas fa-eye"></i> Watchlist
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.resolver_match.url_name == 'create_listing' %}active{% endif %}"
+                href="{% url 'create_listing' %}"
+              >
+                <i class="fas fa-plus"></i> Create Listing
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle user-nav-link"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-user"></i> 
+                {{ user|get_username_or_full_name }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                  <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+              </div>
+            </li>
+            {% else %}
+
+            <li class="nav-item mx-1">
+                <button class="btn btn-light btn-block border {% if request.resolver_match.url_name == 'login' %}active{% endif %}" onclick="window.location.href='{% url 'login' %}'">
+                    <i class="fas fa-user-plus"></i> Log In
+                </button>
+            </li>
+
+            <li class="nav-item mx-1">
+                <button class="btn btn-primary btn-block border {% if request.resolver_match.url_name == 'register' %}active{% endif %}" onclick="window.location.href='{% url 'register' %}'">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </li>
+
+
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- jQuery and Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
+
+    {% if messages %} {% for message in messages %}
+    <div
+      id="messages"
+      class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <script>
+      // Set a timeout to hide the message after 5 seconds
+      setTimeout(function () {
+        var message = document.querySelector(".alert");
+        if (message) {
+          message.style.display = "none";
+        }
+      }, 5000);
+
+      // Add event listener to all close buttons
+      document.querySelectorAll(".btn-close").forEach(function (btn) {
+        btn.addEventListener("click", function (e) {
+          // Hide the message containing the clicked button
+          e.target.closest(".alert").style.display = "none";
+        });
+      });
+    </script>
+    {% endfor %} {% endif %}
+
+  
+    <div class="container mt-2 mb-5">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            {% block breadcrumb %}
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            {% endblock %}
+        </ol>
+    </nav>
+    {% block body %} {% endblock %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+#messages {
+  margin: 10px !important;
+}
+/* Style for body with custom class "index-body" */
+
+.index-body .card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, calc(25% - 20px)));
+  grid-gap: 20px;
+}
+
+.index-body .card-img-top {
+  height: 250px !important;
+  object-fit: contain;
+}
+
+.listing-img {
+  height: 550px !important;
+  object-fit: contain;
+}
+
+.close {
+  float: right;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  padding: 0.5rem;
+}
+.navbar-brand i {
+  margin-right: 0.5rem;
+}
+
+.user-nav-link {
+  font-weight: bold !important;
+  color: #fff !important; /* or your desired active color */
+}
+
+.btn-toolbar.float-left > * {
+  margin-right: 0.75rem !important;
+}
+
+.required-star {
+  color: red;
+}
